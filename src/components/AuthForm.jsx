@@ -1,8 +1,6 @@
 import { Link } from 'react-router-dom';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import classes from './AuthForm.module.css';
-import { useQuery } from 'react-query';
-import axios from 'axios';
 import { UserContext } from './UserContext';
 import { useForm } from 'react-hook-form';
   
@@ -111,11 +109,11 @@ function AuthForm() {
                     <input type="password" {...register("password", {required: true})} />
                 </p>
                 <p>
-                    <label htmlFor="firstName">Password</label>
+                    <label htmlFor="firstName">First Name</label>
                     <input type="text" {...register("firstName", {required: true})} />
                 </p>
                 <p>
-                    <label htmlFor="lastName">Password</label>
+                    <label htmlFor="lastName">Last Name</label>
                     <input type="text" {...register("lastName", {required: true})} />
                 </p>
                 <div className={classes.actions}>
