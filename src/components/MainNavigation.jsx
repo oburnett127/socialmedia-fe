@@ -12,23 +12,33 @@ function MainNavigation() {
         <ul className={classes.list}>
           <li>
             <NavLink
-              to="/"
+              to="/friends"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }
               end
             >
-              Home
+              Friends
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/jobs"
+              to="/requests"
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }
             >
-              Jobs
+              Requests
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/mypage"
+              className={({ isActive }) =>
+                isActive ? classes.active : undefined
+              }
+            >
+              My Page
             </NavLink>
           </li>
           {!isLoggedIn && (
