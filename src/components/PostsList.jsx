@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { useQuery } from 'react-query';
 import axios from 'axios';
@@ -10,26 +9,19 @@ function PostsList() {
 
     const { user } = useContext(UserContext);
 
-    const { data: friendsData, loading: isLoadingFriends } = useQuery('friends',
-      () => { return axios.get(process.env.REACT_APP_SERVER_URL + `/friend/getbyuserid/${user.id}`);}
+    const { data: postsData, loading: isLoading } = useQuery('postsList',
+      () => { return axios.get(process.env.REACT_APP_SERVER_URL + `/post/getbyuserid/${user.id}`);}
     );
 
-    const friends = isLoadingFriends ? [] : friendsData;
-
-    //console.log(friends);
+    const posts = isLoading ? [] : postsData;
 
     return (
-        friends?.data && (
-            <div className={classes.friends}>
-                <h1>Your Friends List</h1>
+        posts?.data && (
+            <div className={classes.posts}>
                 <ul className={classes.list}>
-                    {friends.data?.map((friend) => (
+                    {postsData.data?.map((post) => (
                         <li key={uuidv4()} className={classes.item}>
-                            <Link to={{ pathname: `/friends/${friend.id}` }}>
-                                <div className={classes.content}>
-                                    <h2>{friend.firstName} {friend.lastName}</h2>
-                                </div>
-                            </Link>
+                            {post.text}
                         </li>
                     ))}
                 </ul>

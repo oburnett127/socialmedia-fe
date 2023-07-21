@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { useQuery } from 'react-query';
 import axios from 'axios';
@@ -10,32 +9,52 @@ function RequestsList() {
 
     const { user } = useContext(UserContext);
 
-    const { data: friendsData, loading: isLoadingFriends } = useQuery('friends',
-      () => { return axios.get(process.env.REACT_APP_SERVER_URL + `/friend/getbyuserid/${user.id}`);}
+    const { data: requestsIncomingUsersData, loading: isLoadingIncoming } = useQuery('incomingRequestsList',
+      () => { return axios.get(process.env.REACT_APP_SERVER_URL + `/friend/getincomingrequests/${user.id}`);}
     );
 
-    const friends = isLoadingFriends ? [] : friendsData;
+    const { data: requestsOutgoingUsersData, loading: isLoadingOutgoing } = useQuery('outgoingRequestsList',
+      () => { return axios.get(process.env.REACT_APP_SERVER_URL + `/friend/getoutgoingrequests/${user.id}`);}
+    );
 
-    //console.log(friends);
+    const requestsIncomingUsers = isLoadingIncoming ? [] : requestsIncomingUsersData;
+    const requestsOutgoingUsers = isLoadingOutgoing ? [] : requestsOutgoingUsersData;
+
+    //console.log(requests);
 
     return (
-        friends?.data && (
-            <div className={classes.friends}>
-                <h1>Your Friends List</h1>
-                <ul className={classes.list}>
-                    {friends.data?.map((friend) => (
-                        <li key={uuidv4()} className={classes.item}>
-                            <Link to={{ pathname: `/friends/${friend.id}` }}>
-                                <div className={classes.content}>
-                                    <h2>{friend.firstName} {friend.lastName}</h2>
-                                </div>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+        <>
+            {requestsIncomingUsers?.data && (
+                <div className={classes.requests}>
+                    <h1>Incoming Friend Requests</h1>
+                    <ul className={classes.list}>
+                        {requestsIncomingUsers?.data?.map((requestIncomingUser) => (
+                            <li key={uuidv4()} className={classes.item}>
+                                    <div className={classes.content}>
+                                        <h2>{requestIncomingUser.firstName} {requestIncomingUser.lastName}</h2>
+                                    </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {requestsOutgoingUsers?.data && (
+                <div className={classes.requests}>
+                    <h1>Outgoing Friend Requests</h1>
+                    <ul className={classes.list}>
+                        {requestsOutgoingUsers?.data?.map((requestOutgoingUser) => (
+                            <li key={uuidv4()} className={classes.item}>
+                                    <div className={classes.content}>
+                                        <h2>{requestOutgoingUser.firstName} {requestOutgoingUser.lastName}</h2>
+                                    </div>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+        </>
         )
-    )
 }
 
 export default RequestsList;

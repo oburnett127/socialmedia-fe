@@ -71,7 +71,7 @@ function AuthForm() {
             //console.log("setting isLoggedIn to true");
 
             try {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL + `/user/getuser/${data.email}`);
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + `/user/getuserbyemail/${data.email}`);
                 const user = await response.json();
                 setUser(user);
                 console.log("userId is: " + user.id);
@@ -108,14 +108,18 @@ function AuthForm() {
                     <label htmlFor="password">Password</label>
                     <input type="password" {...register("password", {required: true})} />
                 </p>
-                <p>
-                    <label htmlFor="firstName">First Name</label>
-                    <input type="text" {...register("firstName", {required: true})} />
-                </p>
-                <p>
-                    <label htmlFor="lastName">Last Name</label>
-                    <input type="text" {...register("lastName", {required: true})} />
-                </p>
+                {isLogin === 'signup' && (
+                    <>
+                        <p>
+                            <label htmlFor="firstName">First Name</label>
+                            <input type="text" {...register("firstName", {required: true})} />
+                        </p>
+                        <p>
+                            <label htmlFor="lastName">Last Name</label>
+                            <input type="text" {...register("lastName", {required: true})} />
+                        </p>
+                    </>
+                )}
                 <div className={classes.actions}>
                     <Link to={'/auth'} onClick={handleToggleMode}>
                         {isLogin === 'login' ? 'Create new user' : 'Login'}
