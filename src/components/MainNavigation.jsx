@@ -6,6 +6,8 @@ import classes from './MainNavigation.module.css';
 function MainNavigation() {
   const { isLoggedIn } = useContext(UserContext);
 
+  const { user } = useContext(UserContext);
+
   return (
     <header className={classes.header}>
       <nav>
@@ -28,12 +30,12 @@ function MainNavigation() {
                 isActive ? classes.active : undefined
               }
             >
-              Requests
+              Search/Requests
             </NavLink>
           </li>
           <li>
             <NavLink
-              to="/mypage"
+              to={{ pathname: `/userprofile/${user?.id}` }}
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }

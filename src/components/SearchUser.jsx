@@ -1,33 +1,59 @@
-import React from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import classes from './JobsList.module.css';
 
+const getUsersData = (searchQuery) => {
+  return axios.get(process.env.REACT_APP_SERVER_URL + `/user/getusersbyname/${searchQuery}`);
+};
+
 function SearchUser() {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+  const [searchQuery, setSearchQuery] = useState('');
 
-    const {register, handleSubmit, formState: {errors}} = useForm();
+  const { data: usersSearchResults, refetch } = useQuery(
+    ['usersSearch', searchQuery],
+    () => getUsersData(searchQuery),
+    { enabled: false }
+  );
 
-    const onSubmit = (data) => {
-        const { data: results } = useQuery('userSearchResults',
-            () => { return axios.get(process.env.REACT_APP_SERVER_URL + `/user/getuserbyname/${data.userSearch}`);}
-        );
+  const onSubmit = (data) => {
+    setSearchQuery(data.searchQuery);
+  };
+
+  useEffect(() => {
+    if (searchQuery !== '') {
+      refetch();
     }
-    
-    return (
-        <>
-            <p className={classes.message}>{message}</p>
-            <form method={method} className={classes.form} errors={errors} onSubmit={handleSubmit(onSubmit)}>
-                <p>
-                    <label htmlFor="userSearch">Search Users</label>
-                    <input type="text" {...register("userSearch", {required: true})} />
-                </p>
-                {errors?.userSearch && <span>The user's name is required.</span>}
-                {/* <div className={classes.actions}>
-                    <button type="submit">Submit</button>
-                </div> */}
-            </form>
-        </>
-    )
+  }, [searchQuery, refetch]);
+
+  return (
+    <>
+      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+        <p>
+          <label htmlFor="searchQuery">Search Users</label>
+          <input type="text" {...register("searchQuery", { required: true })} />
+        </p>
+        <div className={classes.actions}>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+      {errors?.searchQuery && <span>The user's name is required.</span>}
+      { usersSearchResults?.data && (
+        <ul>
+          {usersSearchResults.data.map((user) => (
+            <li key={user.id}>
+              <Link to={{ pathname: `/userprofile/${user.id}` }}>
+                {user.firstName} {user.lastName}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
 }
 
 export default SearchUser;

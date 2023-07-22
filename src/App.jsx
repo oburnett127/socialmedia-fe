@@ -24,7 +24,7 @@ function App() {
                 <Route path="/logout" element={<LogoutPage />}></Route>
                 <Route path="/friends" element={<FriendsPage />}></Route>
                 <Route path="/requests" element={<RequestsPage />}></Route>
-                <Route path="/mypage" element={<UserPage />}></Route>
+                <Route path="/userprofile/:id" element={<UserPage />}></Route>
                 <Route path="*" element={<NotFoundPage />}></Route>
             </Route>
         )

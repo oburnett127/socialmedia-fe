@@ -1,10 +1,9 @@
-import React, { useContext } from 'react';
-import { UserContext } from '../components/UserContext';
+import React from 'react';
 import PageContent from '../components/PageContent';
 
 function HomePage() {
-  const { isLoggedIn } = useContext(UserContext);
-  const { user } = useContext(UserContext);
+  // const { isLoggedIn } = useContext(UserContext);
+  // const { user } = useContext(UserContext);
 
   return (
     <PageContent />

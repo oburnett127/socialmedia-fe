@@ -3,6 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { UserContext } from './UserContext';
 import { useQuery } from 'react-query';
 import axios from 'axios';
+import SearchUser from '../components/SearchUser';
 import classes from './JobsList.module.css';
 
 function RequestsList() {
@@ -53,6 +54,7 @@ function RequestsList() {
                     </ul>
                 </div>
             )}
+            <SearchUser />
         </>
         )
 }
