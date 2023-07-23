@@ -33,9 +33,10 @@ function MainNavigation() {
               Search/Requests
             </NavLink>
           </li>
+          {user && user.id && (
           <li>
             <NavLink
-              to={{ pathname: `/userprofile/${user?.id}` }}
+              to={{ pathname: `/currentuserprofile` }}
               className={({ isActive }) =>
                 isActive ? classes.active : undefined
               }
@@ -43,6 +44,7 @@ function MainNavigation() {
               My Page
             </NavLink>
           </li>
+          )}
           {!isLoggedIn && (
               <li>
                 <NavLink

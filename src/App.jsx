@@ -8,7 +8,8 @@ import AuthenticationPage from './pages/AuthenticationPage';
 import LogoutPage from './pages/LogoutPage';
 import FriendsPage from './pages/FriendsPage';
 import RequestsPage from './pages/RequestsPage';
-import UserPage from './pages/UserPage';
+import CurrentUserPage from './pages/CurrentUserPage';
+import OtherUserPage from './pages/OtherUserPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
@@ -24,7 +25,8 @@ function App() {
                 <Route path="/logout" element={<LogoutPage />}></Route>
                 <Route path="/friends" element={<FriendsPage />}></Route>
                 <Route path="/requests" element={<RequestsPage />}></Route>
-                <Route path="/userprofile/:id" element={<UserPage />}></Route>
+                <Route path="/currentuserprofile" element={<CurrentUserPage />}></Route>
+                <Route path="/otheruserprofile/:id" element={<OtherUserPage />}></Route>
                 <Route path="*" element={<NotFoundPage />}></Route>
             </Route>
         )

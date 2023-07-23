@@ -45,7 +45,7 @@ function SearchUser() {
         <ul>
           {usersSearchResults.data.map((user) => (
             <li key={user.id}>
-              <Link to={{ pathname: `/userprofile/${user.id}` }}>
+              <Link to={{ pathname: `/otheruserprofile/${user.id}` }}>
                 {user.firstName} {user.lastName}
               </Link>
             </li>

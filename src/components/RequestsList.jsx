@@ -32,7 +32,7 @@ function RequestsList() {
                         {requestsIncomingUsers?.data?.map((requestIncomingUser) => (
                             <li key={uuidv4()} className={classes.item}>
                                     <div className={classes.content}>
-                                        <h2>{requestIncomingUser.firstName} {requestIncomingUser.lastName}</h2>
+                                        <p>{requestIncomingUser.firstName} {requestIncomingUser.lastName}</p>
                                     </div>
                             </li>
                         ))}
@@ -47,7 +47,7 @@ function RequestsList() {
                         {requestsOutgoingUsers?.data?.map((requestOutgoingUser) => (
                             <li key={uuidv4()} className={classes.item}>
                                     <div className={classes.content}>
-                                        <h2>{requestOutgoingUser.firstName} {requestOutgoingUser.lastName}</h2>
+                                        <p>{requestOutgoingUser.firstName} {requestOutgoingUser.lastName}</p>
                                     </div>
                             </li>
                         ))}
