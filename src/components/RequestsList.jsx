@@ -23,6 +23,29 @@ function RequestsList() {
 
     //console.log(requests);
 
+    const handleAcceptFriend = (senderUserId) => {
+        const acceptFriend = async () => {
+          try {
+            const requestData = {
+              fromUserId: senderUserId,
+              toUserId: user.id
+            };
+    
+            const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/friend/accept`, {
+              method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestData),
+            });
+          } catch (error) {
+            console.error('Error accepting friend request:', error);
+          }
+        };
+        
+        acceptFriend();
+      }
+
     return (
         <>
             {requestsIncomingUsers?.data && (
@@ -34,6 +57,7 @@ function RequestsList() {
                                     <div className={classes.content}>
                                         <p>{requestIncomingUser.firstName} {requestIncomingUser.lastName}</p>
                                     </div>
+                                    <button onClick={() => handleAcceptFriend(requestIncomingUser.id)}>Accept</button>
                             </li>
                         ))}
                     </ul>

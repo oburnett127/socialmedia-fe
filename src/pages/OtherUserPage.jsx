@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import PostsList from '../components/PostsList';
 import NewPost from '../components/NewPost';
@@ -7,6 +7,58 @@ import { UserContext } from '../components/UserContext';
 function OtherUserPage() {
   const { id: searchedUserId } = useParams();
   const { user } = useContext(UserContext);
+  const [isFriend, setIsFriend] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(false);
+
+
+  useEffect(() => {
+    const getFriendStatus = async () => {
+      try {
+        const requestData = {
+          loggedInUserId: user.id,
+          otherUserId: searchedUserId
+        };
+
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/friend/getfriendstatus`, {
+          method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        });
+        const result = await response.json();
+        setIsFriend(result);
+        console.log(result);
+      } catch (error) {
+        console.error('Error getting friend status:', error);
+      }
+    };
+
+    const getBlockedStatus = async () => {
+      try {
+        const requestData = {
+          blockerUserId: user.id,
+          blockedUserId: searchedUserId
+        };
+
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/getblockedstatus`, {
+          method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        });
+        const result = await response.json();
+        setIsBlocked(result);
+        console.log(result);
+      } catch (error) {
+        console.error('Error getting blocked status:', error);
+      }
+    };
+    
+    getFriendStatus();
+    getBlockedStatus();
+  }, [user.id, searchedUserId]);
 
   const handleRequestFriend = () => {
     const requestFriend = async () => {
@@ -57,13 +109,9 @@ function OtherUserPage() {
   const handleBlockUser = () => {
     const blockUser = async () => {
       try {
-
-        console.log("user.id ", user.id);
-        console.log("searchedUserId ", searchedUserId);
-
         const requestData = {
-          blockerUserId: Number(user.id),
-          blockedUserId: Number(searchedUserId)
+          blockerUserId: user.id,
+          blockedUserId: searchedUserId
         };
 
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/create`, {
@@ -81,17 +129,40 @@ function OtherUserPage() {
     blockUser();
   }
 
+  const handleUnblockUser = () => {
+    const unblockUser = async () => {
+      try {
+        const requestData = {
+          blockerUserId: user.id,
+          blockedUserId: searchedUserId
+        };
+
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/block/delete`, {
+          method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestData),
+        });
+      } catch (error) {
+        console.error('Error blocking user:', error);
+      }
+    };
+      
+    unblockUser();
+  }
+
   return (
     <>
       <NewPost />
 
       <PostsList id={searchedUserId} />
 
-      <button onClick={() => handleRequestFriend()}>Request Friend</button>
+      {!isFriend && (<button onClick={() => handleRequestFriend()}>Send Request</button>)}
+      {isFriend && (<button onClick={() => handleRemoveFriend()}>Remove Friend</button>)}
 
-      <button onClick={() => handleRemoveFriend()}>Remove Friend</button>
-
-      <button onClick={() => handleBlockUser()}>Block User</button>
+      {!isBlocked && (<button onClick={() => handleBlockUser()}>Block User</button>)}
+      {isBlocked && (<button onClick={() => handleUnblockUser()}>Unblock User</button>)}
     </>
   )
 }

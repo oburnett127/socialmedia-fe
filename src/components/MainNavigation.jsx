@@ -30,7 +30,7 @@ function MainNavigation() {
                 isActive ? classes.active : undefined
               }
             >
-              Search/Requests
+              Search / Requests
             </NavLink>
           </li>
           {user && user.id && (
