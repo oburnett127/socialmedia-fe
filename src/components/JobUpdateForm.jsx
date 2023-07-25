@@ -3,7 +3,6 @@ import { useNavigate, useNavigation } from 'react-router-dom';
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 import { useForm } from 'react-hook-form';
-import classes from './JobUpdateForm.module.css';
 
 const JobUpdateForm = ({ job }) => {
     const navigate = useNavigate();

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useContext } from 'react';
-import classes from './AuthForm.module.css';
 import { UserContext } from './UserContext';
 import { useForm } from 'react-hook-form';
   
@@ -97,7 +96,7 @@ function AuthForm() {
     }
  
     return (
-            <form className={classes.form} errors={errors} onSubmit={handleSubmit(onSubmit)}>
+            <form errors={errors} onSubmit={handleSubmit(onSubmit)}>
                 <h1>{isLogin === 'login' ? 'Log in' : 'Create a new user'}</h1>
                 <p>{message}</p>
                 <p>
@@ -120,7 +119,7 @@ function AuthForm() {
                         </p>
                     </>
                 )}
-                <div className={classes.actions}>
+                <div>
                     <Link to={'/auth'} onClick={handleToggleMode}>
                         {isLogin === 'login' ? 'Create new user' : 'Login'}
                     </Link>

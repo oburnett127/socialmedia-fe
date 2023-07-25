@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import { UserContext } from './UserContext';
-import classes from './JobPostForm.module.css';
 
 
 function NewPost() {
@@ -32,7 +31,7 @@ function NewPost() {
    };
 
     return (
-        <form className={classes.form} errors={errors} onSubmit={handleSubmit(onSubmit)}>
+        <form errors={errors} onSubmit={handleSubmit(onSubmit)}>
             <textarea {...register("postText", {required: true})} text="Write a new post..." />
             <button type="submit">Submit</button>
         </form>

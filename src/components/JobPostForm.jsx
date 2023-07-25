@@ -1,6 +1,5 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, useNavigation } from 'react-router-dom';
-import classes from './JobPostForm.module.css';
 import { UserContext } from './UserContext';
 import { useForm } from 'react-hook-form';
 

@@ -4,7 +4,6 @@ import { UserContext } from './UserContext';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import SearchUser from '../components/SearchUser';
-import classes from './JobsList.module.css';
 
 function RequestsList() {
 
@@ -49,12 +48,12 @@ function RequestsList() {
     return (
         <>
             {requestsIncomingUsers?.data && (
-                <div className={classes.requests}>
+                <div>
                     <h1>Incoming Friend Requests</h1>
-                    <ul className={classes.list}>
+                    <ul>
                         {requestsIncomingUsers?.data?.map((requestIncomingUser) => (
-                            <li key={uuidv4()} className={classes.item}>
-                                    <div className={classes.content}>
+                            <li key={uuidv4()}>
+                                    <div>
                                         <p>{requestIncomingUser.firstName} {requestIncomingUser.lastName}</p>
                                     </div>
                                     <button onClick={() => handleAcceptFriend(requestIncomingUser.id)}>Accept</button>
@@ -65,12 +64,12 @@ function RequestsList() {
             )}
 
             {requestsOutgoingUsers?.data && (
-                <div className={classes.requests}>
+                <div>
                     <h1>Outgoing Friend Requests</h1>
-                    <ul className={classes.list}>
+                    <ul>
                         {requestsOutgoingUsers?.data?.map((requestOutgoingUser) => (
-                            <li key={uuidv4()} className={classes.item}>
-                                    <div className={classes.content}>
+                            <li key={uuidv4()}>
+                                    <div>
                                         <p>{requestOutgoingUser.firstName} {requestOutgoingUser.lastName}</p>
                                     </div>
                             </li>

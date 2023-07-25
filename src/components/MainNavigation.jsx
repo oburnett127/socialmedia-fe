@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserContext } from './UserContext';
-import classes from './MainNavigation.module.css';
 
 function MainNavigation() {
   const { isLoggedIn } = useContext(UserContext);
@@ -9,15 +8,12 @@ function MainNavigation() {
   const { user } = useContext(UserContext);
 
   return (
-    <header className={classes.header}>
+    <header>
       <nav>
-        <ul className={classes.list}>
+        <ul>
           <li>
             <NavLink
               to="/friends"
-              className={({ isActive }) =>
-                isActive ? classes.active : undefined
-              }
               end
             >
               Friends
@@ -26,9 +22,6 @@ function MainNavigation() {
           <li>
             <NavLink
               to="/requests"
-              className={({ isActive }) =>
-                isActive ? classes.active : undefined
-              }
             >
               Search / Requests
             </NavLink>
@@ -37,9 +30,6 @@ function MainNavigation() {
           <li>
             <NavLink
               to={{ pathname: `/currentuserprofile` }}
-              className={({ isActive }) =>
-                isActive ? classes.active : undefined
-              }
             >
               My Page
             </NavLink>
@@ -49,9 +39,6 @@ function MainNavigation() {
               <li>
                 <NavLink
                   to="/auth"
-                  className={({ isActive }) =>
-                    isActive ? classes.active : undefined
-                  }
                 >
                   Login / Signup
                 </NavLink>
@@ -62,9 +49,6 @@ function MainNavigation() {
               <li>
                 <NavLink
                   to="/logout"
-                  className={({ isActive }) =>
-                    isActive ? classes.active : undefined
-                  }
                 >
                   Logout
                 </NavLink>

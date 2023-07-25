@@ -3,7 +3,6 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import classes from './JobsList.module.css';
 
 const getUsersData = (searchQuery) => {
   return axios.get(process.env.REACT_APP_SERVER_URL + `/user/getusersbyname/${searchQuery}`);
@@ -31,12 +30,12 @@ function SearchUser() {
 
   return (
     <>
-      <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <p>
           <label htmlFor="searchQuery">Search Users</label>
           <input type="text" {...register("searchQuery", { required: true })} />
         </p>
-        <div className={classes.actions}>
+        <div>
           <button type="submit">Submit</button>
         </div>
       </form>

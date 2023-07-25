@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import classes from './JobsList.module.css';
+import Post from './Post';
 
 function PostsList({ id }) {
   const [posts, setPosts] = useState([]);
@@ -21,11 +21,11 @@ function PostsList({ id }) {
 
   return (
     Array.isArray(posts) && posts.length > 0 ? (
-      <div className={classes.posts}>
-        <ul className={classes.list}>
+      <div>
+        <ul>
           {posts.map((post) => (
-            <li key={uuidv4()} className={classes.item}>
-              {post.text}
+            <li key={uuidv4()}>
+              <Post postInfo={post} />
             </li>
           ))}
         </ul>

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
-import classes from './JobsList.module.css';
 
 function FriendsList() {
     const { user } = useContext(UserContext);
@@ -34,13 +33,13 @@ function FriendsList() {
 
     return (
         !isLoadingFriends && friends && (
-            <div className={classes.friends}>
+            <div>
                 <h1>Your Friends List</h1>
-                <ul className={classes.list}>
+                <ul>
                     {friends.map((friend) => (
-                        <li key={uuidv4()} className={classes.item}>
+                        <li key={uuidv4()}>
                             <Link to={{ pathname: `/otheruserprofile/${friend.id}` }}>
-                                <div className={classes.content}>
+                                <div>
                                     <h2>{friend.firstName} {friend.lastName}</h2>
                                 </div>
                             </Link>

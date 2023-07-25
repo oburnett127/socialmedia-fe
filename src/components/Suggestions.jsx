@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import classes from './JobsList.module.css';
 
 function Suggestions() {
 
@@ -18,13 +17,13 @@ function Suggestions() {
 
     return (
         friends?.data && (
-            <div className={classes.friends}>
+            <div>
                 <h1>Your Friends List</h1>
-                <ul className={classes.list}>
+                <ul>
                     {friends.data?.map((friend) => (
-                        <li key={uuidv4()} className={classes.item}>
+                        <li key={uuidv4()}>
                             <Link to={{ pathname: `/friends/${friend.id}` }}>
-                                <div className={classes.content}>
+                                <div>
                                     <h2>{friend.firstName} {friend.lastName}</h2>
                                 </div>
                             </Link>
