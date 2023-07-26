@@ -55,7 +55,7 @@ function Post({ postInfo }) {
             )}
             <ul>
                 {comments.map((comment) => (
-                        <li><p>{comment.text}</p></li>
+                        <li>{comment.text}</li>
                 ))}
             </ul>
         </>

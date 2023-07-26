@@ -1,0 +1,9 @@
+.friendContainer {
+    display: flex;
+    align-items: center;
+  }
+  
+.friendContainer a {
+text-decoration: none;
+}
+  

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserContext } from './UserContext';
+import classes from './MainNavigation.module.css';
 
 function MainNavigation() {
   const { isLoggedIn } = useContext(UserContext);
@@ -10,25 +11,25 @@ function MainNavigation() {
   return (
     <header>
       <nav>
-        <ul>
-          <li>
-            <NavLink
+        <ul className={classes.unorderedlist}>
+          <li className={classes.listitem}>
+            <NavLink className={classes.lia}
               to="/friends"
               end
             >
               Friends
             </NavLink>
           </li>
-          <li>
-            <NavLink
+          <li className={classes.listitem}>
+            <NavLink className={classes.lia}
               to="/requests"
             >
               Search / Requests
             </NavLink>
           </li>
           {user && user.id && (
-          <li>
-            <NavLink
+          <li className={classes.listitem}>
+            <NavLink className={classes.lia}
               to={{ pathname: `/currentuserprofile` }}
             >
               My Page
@@ -36,8 +37,8 @@ function MainNavigation() {
           </li>
           )}
           {!isLoggedIn && (
-              <li>
-                <NavLink
+              <li className={classes.listitem}>
+                <NavLink className={classes.lia}
                   to="/auth"
                 >
                   Login / Signup
@@ -46,8 +47,8 @@ function MainNavigation() {
             )
           }
           {isLoggedIn && (
-              <li>
-                <NavLink
+              <li className={classes.listitem}>
+                <NavLink className={classes.lia}
                   to="/logout"
                 >
                   Logout

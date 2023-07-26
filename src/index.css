@@ -71,10 +71,20 @@
     box-sizing: border-box;
   }
 
-  ul {
-    list-style-type: none;
+  p {
+    margin: 14px;
   }
 
-  p {
-    margin: 8px;
+  ul {
+    color: black;
   }
+
+  ul li {
+    display: block;
+    margin: 6px;
+  }
+
+  a {
+    text-decoration: none;
+  }
+  

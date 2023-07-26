@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import axios from 'axios';
+import classes from './FriendsList.module.css'
 
 function FriendsList() {
     const { user } = useContext(UserContext);
@@ -33,23 +34,25 @@ function FriendsList() {
 
     return (
         !isLoadingFriends && friends && (
-            <div>
-                <h1>Your Friends List</h1>
-                <ul>
-                    {friends.map((friend) => (
-                        <li key={uuidv4()}>
-                            <Link to={{ pathname: `/otheruserprofile/${friend.id}` }}>
-                                <div>
-                                    <h2>{friend.firstName} {friend.lastName}</h2>
-                                </div>
-                            </Link>
-                            <button onClick={() => handleRemoveFriend(friend.id)}>Remove Friend</button>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+          <div>
+            <h1>Your Friends</h1>
+            <ul>
+              {friends.map((friend) => (
+                <li key={uuidv4()}>
+                  <div className={classes.friendContainer}>
+                    <Link to={{ pathname: `/otheruserprofile/${friend.id}` }}>
+                      <div>
+                        <p>{friend.firstName} {friend.lastName}</p>
+                      </div>
+                    </Link>
+                    <button onClick={() => handleRemoveFriend(friend.id)}>Remove Friend</button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
         )
-    )
+      );      
 }
 
 export default FriendsList;
