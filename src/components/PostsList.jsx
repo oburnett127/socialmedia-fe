@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import Post from './Post';
 
 function PostsList({ id }) {
@@ -22,13 +21,9 @@ function PostsList({ id }) {
   return (
     Array.isArray(posts) && posts.length > 0 ? (
       <div>
-        <ul>
           {posts.map((post) => (
-            <li key={uuidv4()}>
               <Post postInfo={post} />
-            </li>
           ))}
-        </ul>
       </div>
     ) : null
   );

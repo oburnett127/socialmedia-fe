@@ -1,12 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
 import { useForm } from 'react-hook-form';
-import { v4 as uuidv4 } from 'uuid';
 
 function Post({ postInfo }) {
     const [makeReply, setMakeReply] = useState(false);
-    const [displayNewComment, setDisplayNewComment] = useState(false);
-    const [newCommentText, setNewCommentText] = useState('');
     const [comments, setComments] = useState([]);
 
     const {register, handleSubmit, formState: {errors}} = useForm();
@@ -42,11 +39,6 @@ function Post({ postInfo }) {
                 },
                 body: JSON.stringify(requestData),
             });
-
-            if (response.ok) {
-                setDisplayNewComment(true);
-                setNewCommentText(data.commentText);
-            }
         } catch (error) {
             console.error('Error creating comment', error);
         }
@@ -54,29 +46,18 @@ function Post({ postInfo }) {
 
     return (
         <>
-            <article>
-                <p>{postInfo.text}</p>
-            </article>
+            <p style={{"margin-top": "30px"}}>{postInfo.text}</p>
             <button onClick={() => setMakeReply(true)}>Reply</button>
             {makeReply && (<form errors={errors} onSubmit={handleSubmit(onSubmit)}>
                 <textarea {...register("commentText", {required: true})} text="Write a reply..." />
                 <button type="submit">Submit</button>
             </form>
             )}
-            {
-                <div>
-                    <ul>
-                    {comments.map((comment) => (
-                        <li key={uuidv4()}>
-                            <p text={comment.text}></p>
-                        </li>
-                    ))}
-                    </ul>
-                </div>
-            }
-            {displayNewComment && (
-                <p text={newCommentText}></p>
-            )}
+            <ul>
+                {comments.map((comment) => (
+                        <li><p>{comment.text}</p></li>
+                ))}
+            </ul>
         </>
     );
 }

@@ -1,16 +1,10 @@
-* {
-    box-sizing: border-box;
-  }
-  
+
   :root {
     font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-    font-size: 16px;
-    line-height: 24px;
-    font-weight: 400;
-  
+
     color: rgba(0, 0, 0, 100);
     background-color: white;
-  
+
     font-synthesis: none;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -38,13 +32,49 @@
     --color-primary-900: #f6ad1b;
   }
   
-  body {
-    margin: 0;
+  button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin: 2px;
+    font-size: 18px;
+    cursor: pointer;
+    text-align: center;
+    text-decoration: none;
+    outline: none;
+    color: #fff;
+    background-color: #05a8ff;
+    border: none;
+    border-radius: 8px;
   }
   
+  button:hover {background-color: #150373}
+  
+  button:active {
+    background-color: #7306d8;
+  }
+
+  textarea {
+    width: 100%;
+    height: 150px;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    background-color: #f8f8f8;
+    resize: none;
+  }
+
+  input[type=text], input[type=email], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+  }
+
   ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    list-style-type: none;
   }
-  
+
+  p {
+    margin: 8px;
+  }

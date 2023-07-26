@@ -123,7 +123,7 @@ function AuthForm() {
                     <Link to={'/auth'} onClick={handleToggleMode}>
                         {isLogin === 'login' ? 'Create new user' : 'Login'}
                     </Link>
-                    <button type="submit">Submit</button>
+                    <button type="submit" style={{"margin-left": "16px"}}>Submit</button>
                 </div>
             </form>
     );
