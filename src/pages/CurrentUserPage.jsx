@@ -5,12 +5,11 @@ import NewPost from '../components/NewPost';
 
 function CurrentUserPage() {
   const { user } = useContext(UserContext);
-
-  console.log("user.id is: ", user.id)
+  //console.log("user.id is: ", user.id)
 
   return (
     <>
-      <NewPost profileUserId={user.id} />
+      <NewPost profUID={user.id} />
       <PostsList id={user.id} />
     </>
   )

@@ -154,7 +154,7 @@ function OtherUserPage() {
 
   return (
     <>
-      <NewPost profileUserId={searchedUserId} />
+      <NewPost profUID={searchedUserId} />
 
       <PostsList id={searchedUserId} />
 

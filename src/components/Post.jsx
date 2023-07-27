@@ -30,7 +30,7 @@ function Post({ postInfo }) {
     const fetchUsers = async () => {
       try {
         const userIds = comments.map(comment => comment.userId);
-        userIds.push(postInfo.userId);
+        userIds.push(postInfo.authorUserId);
         const uniqueUserIds = [...new Set(userIds)];
 
         for (const userId of uniqueUserIds) {
@@ -45,7 +45,7 @@ function Post({ postInfo }) {
     };
 
     fetchUsers();
-  }, [comments, postInfo.userId]);
+  }, [comments, postInfo.authorUserId]);
 
   const onSubmit = async (data) => {
     try {

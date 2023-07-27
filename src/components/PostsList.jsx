@@ -7,6 +7,7 @@ function PostsList({ id }) {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        //console.log('Posts List - id is: ', id);
         const response = await fetch(process.env.REACT_APP_SERVER_URL + `/post/getbyprofile/${id}`);
         const postsData = await response.json();
         setPosts(postsData);
