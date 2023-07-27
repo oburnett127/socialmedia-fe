@@ -154,15 +154,15 @@ function OtherUserPage() {
 
   return (
     <>
-      <NewPost />
+      <NewPost profileUserId={searchedUserId} />
 
       <PostsList id={searchedUserId} />
 
       {!isFriend && (<button onClick={() => handleRequestFriend()}>Send Request</button>)}
       {isFriend && (<button onClick={() => handleRemoveFriend()}>Remove Friend</button>)}
 
-      {!isBlocked && (<button onClick={() => handleBlockUser()}>Block User</button>)}
-      {isBlocked && (<button onClick={() => handleUnblockUser()}>Unblock User</button>)}
+      {/* {!isBlocked && (<button onClick={() => handleBlockUser()}>Block User</button>)}
+      {isBlocked && (<button onClick={() => handleUnblockUser()}>Unblock User</button>)} */}
     </>
   )
 }

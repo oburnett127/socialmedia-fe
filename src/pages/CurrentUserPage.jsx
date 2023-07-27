@@ -10,7 +10,7 @@ function CurrentUserPage() {
 
   return (
     <>
-      <NewPost />
+      <NewPost profileUserId={user.id} />
       <PostsList id={user.id} />
     </>
   )

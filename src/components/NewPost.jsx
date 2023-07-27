@@ -5,7 +5,7 @@ import axios from 'axios';
 import { UserContext } from './UserContext';
 
 
-function NewPost() {
+function NewPost({profileUserId}) {
 
   const { user } = useContext(UserContext);
 
@@ -26,7 +26,7 @@ function NewPost() {
     });
 
     const onSubmit = (data) => {
-       const formData = { userId: user.id, text: data.postText};
+       const formData = { authorUserId: user.id, profileUserId: profileUserId, text: data.postText};
        mutation.mutate(formData);
    };
 
