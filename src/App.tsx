@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from 'react-router-dom';
-import { UserContext } from './components/UserContext';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import HomePage from './pages/HomePage';
 import RootLayout from './pages/RootLayout';
@@ -11,11 +10,11 @@ import RequestsPage from './pages/RequestsPage';
 import CurrentUserPage from './pages/CurrentUserPage';
 import OtherUserPage from './pages/OtherUserPage';
 import NotFoundPage from './pages/NotFoundPage';
+import { UserProvider } from './components/UserContext';
 
 function App() {
 
-    const [user, setUser] = useState();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
     const router = createBrowserRouter(
         createRoutesFromElements(
@@ -34,11 +33,11 @@ function App() {
 
     return (
         <QueryClientProvider client={new QueryClient()}>
-            <UserContext.Provider value={{ user, setUser, isLoggedIn, setIsLoggedIn }}>
+            <UserProvider>
                 <div className={"App"}>
                     <RouterProvider router={router} />
                 </div>
-            </UserContext.Provider>
+            </UserProvider>
         </QueryClientProvider>
     );
 }

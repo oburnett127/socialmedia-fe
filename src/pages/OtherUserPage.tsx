@@ -5,26 +5,30 @@ import NewPost from '../components/NewPost';
 import { UserContext } from '../components/UserContext';
 
 function OtherUserPage() {
-  const { id: searchedUserId } = useParams();
-  const { user } = useContext(UserContext);
-  const [isFriend, setIsFriend] = useState(false);
-  const [isBlocked, setIsBlocked] = useState(false);
-
+  const { id: searchedUserId } = useParams<{ id: string }>();
+  const userContext = useContext(UserContext);
+  const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [isBlocked, setIsBlocked] = useState<boolean>(false);
+  if (!userContext || !userContext.user) return null;
+  const { user } = userContext;
+  const jwtToken = localStorage.getItem('jwtToken');
 
   useEffect(() => {
     const getFriendStatus = async () => {
       try {
+        if (!user.id || !searchedUserId) return;
         const requestData = {
           loggedInUserId: user.id,
-          otherUserId: searchedUserId
+          otherUserId: Number(searchedUserId)
         };
 
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/friend/getfriendstatus`, {
           method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestData),
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
+          },
+          body: JSON.stringify(requestData),
         });
         const result = await response.json();
         setIsFriend(result);
@@ -36,6 +40,7 @@ function OtherUserPage() {
 
     const getBlockedStatus = async () => {
       try {
+        if (!user.id || !searchedUserId) return;
         const requestData = {
           blockerUserId: user.id,
           blockedUserId: searchedUserId
@@ -45,6 +50,7 @@ function OtherUserPage() {
           method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`,
             },
             body: JSON.stringify(requestData),
         });
@@ -63,6 +69,7 @@ function OtherUserPage() {
   const handleRequestFriend = () => {
     const requestFriend = async () => {
       try {
+        if (!user.id || !searchedUserId) return;
         const requestData = {
           fromUserId: user.id,
           toUserId: searchedUserId
@@ -72,6 +79,7 @@ function OtherUserPage() {
           method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`,
             },
             body: JSON.stringify(requestData),
         });
@@ -86,6 +94,7 @@ function OtherUserPage() {
   const handleRemoveFriend = () => {
     const removeFriend = async () => {
       try {
+        if (!user.id || !searchedUserId) return;
         const requestData = {
           userId1: user.id,
           userId2: searchedUserId
@@ -95,6 +104,7 @@ function OtherUserPage() {
           method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`,
             },
             body: JSON.stringify(requestData),
         });
@@ -109,6 +119,7 @@ function OtherUserPage() {
   const handleBlockUser = () => {
     const blockUser = async () => {
       try {
+        if (!user.id || !searchedUserId) return;
         const requestData = {
           blockerUserId: user.id,
           blockedUserId: searchedUserId
@@ -118,6 +129,7 @@ function OtherUserPage() {
           method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`,
             },
             body: JSON.stringify(requestData),
         });
@@ -132,6 +144,7 @@ function OtherUserPage() {
   const handleUnblockUser = () => {
     const unblockUser = async () => {
       try {
+        if (!user.id || !searchedUserId) return;
         const requestData = {
           blockerUserId: user.id,
           blockedUserId: searchedUserId
@@ -141,6 +154,7 @@ function OtherUserPage() {
           method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                Authorization: `Bearer ${jwtToken}`,
             },
             body: JSON.stringify(requestData),
         });
@@ -154,13 +168,10 @@ function OtherUserPage() {
 
   return (
     <>
-      <NewPost profUID={searchedUserId} />
-
-      <PostsList id={searchedUserId} />
-
+      {searchedUserId && <NewPost profUID={searchedUserId} />}
+      {searchedUserId && <PostsList id={searchedUserId} />}
       {!isFriend && (<button onClick={() => handleRequestFriend()}>Send Request</button>)}
       {isFriend && (<button onClick={() => handleRemoveFriend()}>Remove Friend</button>)}
-
       {/* {!isBlocked && (<button onClick={() => handleBlockUser()}>Block User</button>)}
       {isBlocked && (<button onClick={() => handleUnblockUser()}>Unblock User</button>)} */}
     </>

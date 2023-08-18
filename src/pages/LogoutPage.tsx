@@ -2,9 +2,11 @@ import React, { useContext } from 'react';
 import { UserContext } from '../components/UserContext';
 
 function LogoutPage() {
-  const { setIsLoggedIn } = useContext(UserContext);
+  const userContext = useContext(UserContext);
+  if (!userContext) return null;
+  const { setIsLoggedIn } = userContext;
    
-  localStorage.removeItem('token');
+  localStorage.removeItem('jwtToken');
   setIsLoggedIn(false); 
   
   return (

@@ -1,19 +1,27 @@
 import { Link } from 'react-router-dom';
 import React, { useState, useContext } from 'react';
-import { UserContext } from './UserContext';
 import { useForm } from 'react-hook-form';
-  
+import { UserContext } from './UserContext'
+
+interface FormData {
+    email: string;
+    password: string;
+    firstName?: string;
+    lastName?: string;
+}
+
 function AuthForm() {
-    const { setUser, setIsLoggedIn } = useContext(UserContext);
-    const [isLogin, setIsLogin] = useState('login');
-    const [message, setMessage] = useState('');
+    const userContext = useContext(UserContext);
+    if (!userContext) throw new Error("AuthForm must be used within a provider that provides UserContext");
+    const { setUser, setIsLoggedIn } = userContext;
+    const [isLogin, setIsLogin] = useState<'login' | 'signup'>('login');
+    const [message, setMessage] = useState<string>('');
 
-    const {register, handleSubmit, formState: {errors}} = useForm();
+    const { register, handleSubmit } = useForm<FormData>();
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: FormData) => {
         try {
             setMessage('');
-            //console.log("line 1");
 
             let authData = {
                 email: data.email,
@@ -32,7 +40,6 @@ function AuthForm() {
                 console.log("registration request");
             }
 
-            //console.log("line 6");
             const response = await fetch(url, {
                 method: 'POST',
                 headers: {
@@ -42,7 +49,6 @@ function AuthForm() {
             });
 
             if (isLogin !== 'login' && response.status === 409) {
-                //console.log("line 8");
                 setMessage('The email address you entered is already taken. Please enter a different email.');
                 throw new Error('The email address you entered is already taken. Please enter a different email.');
             }
@@ -51,15 +57,14 @@ function AuthForm() {
             //console.log("response.status: " + response.status);
 
             if (!response.ok) {
-                //console.log("line 9");
                 setMessage('Log in or registration failed');
                 throw new Error('Could not authenticate user.');
             }
 
             const resData = await response.json();
-            const token = resData.token;
+            const jwtToken = resData.token;
 
-            localStorage.setItem('token', token);
+            localStorage.setItem('jwtToken', jwtToken);
             const expiration = new Date();
             expiration.setHours(expiration.getHours() + 2);
             localStorage.setItem('expiration', expiration.toISOString());
@@ -70,21 +75,25 @@ function AuthForm() {
             //console.log("setting isLoggedIn to true");
 
             try {
-                const response = await fetch(process.env.REACT_APP_SERVER_URL + `/user/getuserbyemail/${data.email}`);
+                const response = await fetch(process.env.REACT_APP_SERVER_URL + `/user/getuserbyemail/${data.email}`, {
+                    headers: {
+                        'Authorization': `Bearer ${jwtToken}`,
+                    }
+                });
                 const user = await response.json();
+                console.log('user is: ', user);
                 setUser(user);
                 console.log("userId is: " + user.id);
-            } catch (error) {
-                if (error.response) {
+            } catch (error: any) {
+                if (error?.response) {
                     console.log(error.response);
-                } else if (error.request) {
+                } else if (error?.request) {
                     console.log("network error");
                 } else {
                     console.log(error);
                 }
             }
         } catch(err) {
-            //console.log("line 10");
             console.log(err);
         }
     };
@@ -96,7 +105,7 @@ function AuthForm() {
     }
  
     return (
-            <form errors={errors} onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <h1>{isLogin === 'login' ? 'Log in' : 'Create a new user'}</h1>
                 <p>{message}</p>
                 <p>
@@ -123,7 +132,7 @@ function AuthForm() {
                     <Link to={'/auth'} onClick={handleToggleMode}>
                         {isLogin === 'login' ? 'Create new user' : 'Login'}
                     </Link>
-                    <button type="submit" style={{"margin-left": "16px"}}>Submit</button>
+                    <button type="submit" style={{"marginLeft": "16px"}}>Submit</button>
                 </div>
             </form>
     );

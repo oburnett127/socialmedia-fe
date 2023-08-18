@@ -1,15 +1,31 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 
-const getUsersData = (searchQuery) => {
-  return axios.get(process.env.REACT_APP_SERVER_URL + `/user/getusersbyname/${searchQuery}`);
+interface IUserSearchFormInput {
+  searchQuery: string;
+}
+
+interface IUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+}
+
+const jwtToken = localStorage.getItem('jwtToken');
+
+const getUsersData = (searchQuery: string) => {
+  return axios.get<IUser[]>(process.env.REACT_APP_SERVER_URL + `/user/getusersbyname/${searchQuery}`, {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+    }
+  });
 };
 
 function SearchUser() {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, formState: { errors } } = useForm<IUserSearchFormInput>();
   const [searchQuery, setSearchQuery] = useState('');
 
   const { data: usersSearchResults, refetch } = useQuery(
@@ -18,7 +34,7 @@ function SearchUser() {
     { enabled: false }
   );
 
-  const onSubmit = (data) => {
+  const onSubmit: SubmitHandler<IUserSearchFormInput> = (data) => {
     setSearchQuery(data.searchQuery);
   };
 
@@ -40,9 +56,9 @@ function SearchUser() {
         </div>
       </form>
       {errors?.searchQuery && <span>The user's name is required.</span>}
-      { usersSearchResults?.data && (
+      {usersSearchResults?.data && (
         <ul>
-          {usersSearchResults.data.map((user) => (
+          {usersSearchResults.data.map((user: IUser) => (
             <li key={user.id}>
               <Link to={{ pathname: `/otheruserprofile/${user.id}` }}>
                 {user.firstName} {user.lastName}
@@ -56,3 +72,4 @@ function SearchUser() {
 }
 
 export default SearchUser;
+

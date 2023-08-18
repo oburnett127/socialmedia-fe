@@ -1,20 +1,53 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { UserContext } from './UserContext';
-import { useForm } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import classes from './Post.module.css';
 
-function Post({ postInfo }) {
-  const [makeReply, setMakeReply] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [users, setUsers] = useState({});
+interface PostProps {
+  postInfo: {
+    postId: string;
+    authorUserId: string;
+    text: string;
+  };
+}
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const { user } = useContext(UserContext);
+interface Comment {
+  commentId: string;
+  userId: string;
+  text: string;
+}
+
+interface Users {
+  [key: string]: {
+    firstName?: string;
+    lastName?: string;
+  };
+}
+
+interface IFormInput {
+  commentText: string;
+}
+
+function Post({ postInfo }: PostProps) {
+  const [makeReply, setMakeReply] = useState(false);
+  const [comments, setComments] = useState<Comment[]>([]);
+  const [users, setUsers] = useState<Users>({});
+
+  const userContext = useContext(UserContext);
+  const user = userContext ? userContext.user : null;
+
+  const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+  const jwtToken = localStorage.getItem('jwtToken');
 
   useEffect(() => {
     const fetchComments = async () => {
       try {
-        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/comment/getbypost/${postInfo.postId}`);
+        if (!user) return null;
+        const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/comment/getbypost/${postInfo.postId}`, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          }
+        });
         const commentsData = await response.json();
         setComments(commentsData);
       } catch (error) {
@@ -24,19 +57,20 @@ function Post({ postInfo }) {
     };
 
     fetchComments();
-  }, [postInfo.postId]);
+  }, [postInfo.postId, user]);
 
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        if (!user) return null;
         const userIds = comments.map(comment => comment.userId);
         userIds.push(postInfo.authorUserId);
         const uniqueUserIds = [...new Set(userIds)];
 
         for (const userId of uniqueUserIds) {
-          const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/getuserbyuserid/${userId}`);
+          const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/getuserbyuserid/${user.id}`);
           const userData = await response.json();
-          setUsers(prevUsers => ({ ...prevUsers, [userId]: userData }));
+          setUsers(prevUsers => ({ ...prevUsers, [user.id]: userData }));
         }
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -45,9 +79,11 @@ function Post({ postInfo }) {
     };
 
     fetchUsers();
-  }, [comments, postInfo.authorUserId]);
+  }, [comments, postInfo.authorUserId, user]);
 
-  const onSubmit = async (data) => {
+  if (!userContext || !user) return null;
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     try {
       const requestData = {
         postId: postInfo.postId,
@@ -79,8 +115,8 @@ function Post({ postInfo }) {
         <div className={`${classes.postText} ${classes.floatLeft}`}>{postInfo.text}</div>
 
         <button className={classes.replyButton} onClick={() => setMakeReply(true)}>Reply</button>
-        {makeReply && (<form errors={errors} onSubmit={handleSubmit(onSubmit)}>
-            <textarea {...register("commentText", { required: true })} text="Write a reply..." />
+        {makeReply && (<form onSubmit={handleSubmit(onSubmit)}>
+            <textarea {...register("commentText", { required: true })} placeholder="Write a reply..." />
             <button type="submit">Submit</button>
         </form>
         )}
