@@ -11,8 +11,6 @@ interface User {
 interface UserContextProps {
   email: string;
   setEmail: (email: string) => void;
-  userId: number;
-  setUserId: (userId: number) => void;
   user: User | null;
   setUser: (user: User | null) => void;
   isLoggedIn: boolean;
@@ -32,7 +30,7 @@ export const UserProvider = ({ children }: UserProviderProps) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
   return (
-    <UserContext.Provider value={{ email, setEmail, userId, user, setUser, setUserId, isLoggedIn, setIsLoggedIn }}>
+    <UserContext.Provider value={{ email, setEmail, user, setUser, isLoggedIn, setIsLoggedIn }}>
       {children}
     </UserContext.Provider>
   );

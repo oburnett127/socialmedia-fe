@@ -27,6 +27,7 @@ function FriendsList() {
         method: "GET",
         headers: {
           Authorization: `Bearer ${jwtToken}`,
+          'Content-Type': 'application/json',
         },
       });
     }
@@ -44,6 +45,7 @@ function FriendsList() {
         {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
           },
         }
       );

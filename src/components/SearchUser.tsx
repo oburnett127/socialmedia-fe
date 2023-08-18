@@ -17,12 +17,14 @@ interface IUser {
 const jwtToken = localStorage.getItem('jwtToken');
 
 const getUsersData = (searchQuery: string) => {
-  return axios.get<IUser[]>(process.env.REACT_APP_SERVER_URL + `/user/getusersbyname/${searchQuery}`, {
+  return axios.get<IUser[]>(`${process.env.REACT_APP_SERVER_URL}/user/getusersbyname/${encodeURIComponent(searchQuery)}`, {
     headers: {
+      'Content-Type': 'application/json',
       Authorization: `Bearer ${jwtToken}`,
-    }
+    },
   });
 };
+
 
 function SearchUser() {
   const { register, handleSubmit, formState: { errors } } = useForm<IUserSearchFormInput>();

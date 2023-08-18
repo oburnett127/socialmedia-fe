@@ -36,7 +36,7 @@ function Post({ postInfo }: PostProps) {
   const userContext = useContext(UserContext);
   const user = userContext ? userContext.user : null;
 
-  const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
+  const { register, handleSubmit } = useForm<IFormInput>();
   const jwtToken = localStorage.getItem('jwtToken');
 
   useEffect(() => {
@@ -46,6 +46,7 @@ function Post({ postInfo }: PostProps) {
         const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/comment/getbypost/${postInfo.postId}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
           }
         });
         const commentsData = await response.json();
@@ -57,7 +58,7 @@ function Post({ postInfo }: PostProps) {
     };
 
     fetchComments();
-  }, [postInfo.postId, user]);
+  }, [postInfo.postId, user, jwtToken]);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -66,20 +67,26 @@ function Post({ postInfo }: PostProps) {
         const userIds = comments.map(comment => comment.userId);
         userIds.push(postInfo.authorUserId);
         const uniqueUserIds = [...new Set(userIds)];
-
+    
         for (const userId of uniqueUserIds) {
-          const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/getuserbyuserid/${user.id}`);
+          const response = await fetch(`${process.env.REACT_APP_SERVER_URL}/user/getuserbyuserid/${userId}`, {
+            headers: {
+              Authorization: `Bearer ${jwtToken}`,
+              'Content-Type': 'application/json',
+            }
+          });
           const userData = await response.json();
-          setUsers(prevUsers => ({ ...prevUsers, [user.id]: userData }));
+          setUsers(prevUsers => ({ ...prevUsers, [userId]: userData }));
         }
       } catch (error) {
         console.error('Error fetching users:', error);
         setUsers({});
       }
     };
+    
 
     fetchUsers();
-  }, [comments, postInfo.authorUserId, user]);
+  }, [comments, postInfo.authorUserId, user, jwtToken]);
 
   if (!userContext || !user) return null;
 
@@ -95,6 +102,7 @@ function Post({ postInfo }: PostProps) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${jwtToken}`,
         },
         body: JSON.stringify(requestData),
       });

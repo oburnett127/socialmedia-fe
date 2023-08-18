@@ -14,8 +14,6 @@ import { UserProvider } from './components/UserContext';
 
 function App() {
 
-
-
     const router = createBrowserRouter(
         createRoutesFromElements(
             <Route path="/" element={<RootLayout />}>

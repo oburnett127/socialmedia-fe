@@ -19,6 +19,7 @@ function NewPost({ profUID }: { profUID: string }) {
       const response = await axios.post(process.env.REACT_APP_SERVER_URL + '/post/create', postData, {
         headers: {
           'Authorization': `Bearer ${jwtToken}`,
+          'Content-Type': 'application/json',
         }
       });
       return response.data;

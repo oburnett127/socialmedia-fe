@@ -23,6 +23,7 @@ function PostsList({ id }: PostsListProps) {
         const response = await fetch(process.env.REACT_APP_SERVER_URL + `/post/getbyprofile/${id}`, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
+            'Content-Type': 'application/json',
           }
         });
         const postsData: PostInfo[] = await response.json();

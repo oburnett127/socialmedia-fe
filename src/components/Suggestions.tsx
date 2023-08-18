@@ -15,12 +15,18 @@ function Suggestions() {
     const userContext = useContext(UserContext);
     const user = userContext ? userContext.user : null;
     if (!user) return null;
+    const jwtToken = localStorage.getItem('jwtToken');
 
     const { data: friends } = useQuery<IFriend[], Error>(
         'friends',
         async () => {
             const response = await axios.get<IFriend[]>(
-            process.env.REACT_APP_SERVER_URL + `/friend/getbyuserid/${user.id}`
+            process.env.REACT_APP_SERVER_URL + `/friend/getbyuserid/${user.id}`, {
+              headers: {
+                Authorization: `Bearer ${jwtToken}`,
+                'Content-Type': 'application/json',
+              }
+            }
             );
             return response.data;
         }

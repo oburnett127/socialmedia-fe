@@ -25,6 +25,7 @@ function RequestsList() {
     return axios.get(process.env.REACT_APP_SERVER_URL + `/friend/getincomingrequests/${user.id}`, {
       headers:{
         Authorization: `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json',
       }
     });
   };
@@ -34,6 +35,7 @@ function RequestsList() {
     return axios.get(process.env.REACT_APP_SERVER_URL + `/friend/getoutgoingrequests/${user.id}`, {
       headers:{
         Authorization: `Bearer ${jwtToken}`,
+        'Content-Type': 'application/json',
       }
     });
   };
@@ -67,6 +69,7 @@ function RequestsList() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            Authorization: `Bearer ${jwtToken}`,
           },
           body: JSON.stringify(requestData),
         });

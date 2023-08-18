@@ -9,11 +9,13 @@ function OtherUserPage() {
   const userContext = useContext(UserContext);
   const [isFriend, setIsFriend] = useState<boolean>(false);
   const [isBlocked, setIsBlocked] = useState<boolean>(false);
-  if (!userContext || !userContext.user) return null;
-  const { user } = userContext;
+  const { user } = userContext || {}; // Use destructuring with a default object to prevent issues if userContext is null
   const jwtToken = localStorage.getItem('jwtToken');
 
+  //console.log('searched user id: ', searchedUserId);
+
   useEffect(() => {
+    if (!user?.id || !searchedUserId) return;
     const getFriendStatus = async () => {
       try {
         if (!user.id || !searchedUserId) return;
@@ -64,12 +66,12 @@ function OtherUserPage() {
     
     getFriendStatus();
     getBlockedStatus();
-  }, [user.id, searchedUserId]);
+  }, [user?.id, searchedUserId]);
 
   const handleRequestFriend = () => {
     const requestFriend = async () => {
       try {
-        if (!user.id || !searchedUserId) return;
+        if (!user?.id || !searchedUserId) return;
         const requestData = {
           fromUserId: user.id,
           toUserId: searchedUserId
@@ -94,7 +96,7 @@ function OtherUserPage() {
   const handleRemoveFriend = () => {
     const removeFriend = async () => {
       try {
-        if (!user.id || !searchedUserId) return;
+        if (!user?.id || !searchedUserId) return;
         const requestData = {
           userId1: user.id,
           userId2: searchedUserId
@@ -119,7 +121,7 @@ function OtherUserPage() {
   const handleBlockUser = () => {
     const blockUser = async () => {
       try {
-        if (!user.id || !searchedUserId) return;
+        if (!user?.id || !searchedUserId) return;
         const requestData = {
           blockerUserId: user.id,
           blockedUserId: searchedUserId
@@ -144,7 +146,7 @@ function OtherUserPage() {
   const handleUnblockUser = () => {
     const unblockUser = async () => {
       try {
-        if (!user.id || !searchedUserId) return;
+        if (!user?.id || !searchedUserId) return;
         const requestData = {
           blockerUserId: user.id,
           blockedUserId: searchedUserId
@@ -165,6 +167,8 @@ function OtherUserPage() {
       
     unblockUser();
   }
+
+  if (!userContext || !userContext.user) return null;
 
   return (
     <>
