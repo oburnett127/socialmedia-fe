@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { useMutation } from 'react-query';
 import axios from 'axios';
 import { UserContext } from './UserContext';
 
@@ -12,37 +11,31 @@ function NewPost({ profUID }: { profUID: string }) {
   const { register, handleSubmit, formState: { errors } } = useForm<IFormInput>();
   const userContext = useContext(UserContext);
   const jwtToken = localStorage.getItem('jwtToken');
-  
-  const mutation = useMutation(
-    async (postData: any) => {
-      if (!userContext) throw new Error('User context not available');
-      const response = await axios.post(process.env.REACT_APP_SERVER_URL + '/post/create', postData, {
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    if (!userContext || !userContext.user) {
+      return;
+    }
+
+    const formData = { authorUserId: userContext.user.id, profileUserId: profUID, text: data.postText };
+
+    try {
+      const response = await axios.post(process.env.REACT_APP_SERVER_URL + '/post/create', formData, {
         headers: {
           'Authorization': `Bearer ${jwtToken}`,
           'Content-Type': 'application/json',
         }
       });
-      return response.data;
-    },
-    {
-      onSuccess: (data: any) => {
-        console.log('Post created:', data);
-      },
-      onError: (error: string) => {
-        console.error('Error creating post:', error);
-      },
+
+      console.log('Post created:', response.data);
+    } catch (error) {
+      console.error('Error creating post:', error);
     }
-  );
+  };
 
   if (!userContext || !userContext.user) {
-    return (<p>The form could not be generated.</p>)
-  } 
-  const { user } = userContext;
-
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
-    const formData = { authorUserId: user.id, profileUserId: profUID, text: data.postText };
-    mutation.mutate(formData);
-  };
+    return (<p>The form could not be generated.</p>);
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

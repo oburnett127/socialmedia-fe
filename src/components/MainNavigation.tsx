@@ -30,6 +30,11 @@ function MainNavigation() {
                 </NavLink>
               </li>
               <li className={classes.listitem}>
+                <NavLink className={classes.lia} to={{ pathname: `/notifications` }}>
+                  Notifications
+                </NavLink>
+              </li>
+              <li className={classes.listitem}>
                 <NavLink className={classes.lia} to="/logout">
                   Logout
                 </NavLink>

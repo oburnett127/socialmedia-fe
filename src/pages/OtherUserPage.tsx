@@ -66,7 +66,7 @@ function OtherUserPage() {
     
     getFriendStatus();
     getBlockedStatus();
-  }, [user?.id, searchedUserId]);
+  }, [user?.id, searchedUserId, jwtToken]);
 
   const handleRequestFriend = () => {
     const requestFriend = async () => {
