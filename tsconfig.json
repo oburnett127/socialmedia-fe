@@ -18,7 +18,7 @@
     "include": [
         "src/**/*.ts",
         "src/**/*.tsx"
-, "src/components/FriendsList.jsx", "src/components/RequestsList.jsx"    ],
+, "src/components/FriendsList.jsx", "src/components/RequestsList.jsx", "src/components/Notifications.jsx"    ],
     "exclude": [
         "node_modules"
     ]
