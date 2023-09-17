@@ -2,43 +2,63 @@ import { UserContext } from './UserContext';
 import React, { useContext, useEffect, useState } from 'react';
 
 function Notifications() {
+    const [messageSet, setMessageSet] = useState(new Set());
     const [messages, setMessages] = useState([]);
     const userContext = useContext(UserContext);
 
     useEffect(() => {
-        if (!userContext || !userContext.user) {
-            return;
-        }
-
+        
+        if (!userContext || !userContext.user) return;
+    
         const { user } = userContext;
-
-        // Initialize WebSocket connection
+        console.log("WebSocket is being set up.");
+    
         const socket = new WebSocket('ws://localhost:15674/ws');
-
-        // Function to handle received messages
+    
         const handleMessage = (event) => {
-            console.log('Received a message from the server:', event.data);
-            // Your message handling logic here...
+            const rawData = event.data;
+            const contentLengthIndex = rawData.lastIndexOf("content-length:");
+
+            if (contentLengthIndex !== -1) {
+                const startIndex = rawData.indexOf(" ", contentLengthIndex);
+                const lengthString = rawData.substring(contentLengthIndex + "content-length:".length, startIndex).trim();
+                const messageBodyLength = parseInt(lengthString, 10) + 2;
+                
+                const messageBodyStartIndex = rawData.length - messageBodyLength;
+                const messageBody = rawData.substring(messageBodyStartIndex);
+                
+                console.log('Received a message from the server:', messageBody);
+                
+                if (messageSet.has(messageBody)) {
+                    console.log("Ignoring duplicate message", messageBody);
+                    return;
+                }
+
+                messageSet.add(messageBody);
+                setMessageSet(new Set(messageSet));
+
+                setMessages((prevMessages) => [...prevMessages, messageBody]);
+            }
         };
 
         socket.addEventListener('message', handleMessage);
-
-        // Function to handle opening the connection
+        
         const handleOpen = (event) => {
             const login = 'guest';
             const passcode = 'guest';
             socket.send(`CONNECT\nlogin:${login}\npasscode:${passcode}\n\n\0`);
+            socket.send(`SUBSCRIBE\nid:sub-0\ndestination:/queue/user_queue_${user.id}\nack:client\n\n\0`);
         };
 
         socket.addEventListener('open', handleOpen);
-
-        // Cleanup: Remove event listeners and close the socket
+        
         return () => {
             socket.removeEventListener('message', handleMessage);
             socket.removeEventListener('open', handleOpen);
             socket.close();
         };
-    }, [userContext]);
+    }, [userContext, messageSet]);
+
 
     if (!userContext || !userContext.user) {
         return (
